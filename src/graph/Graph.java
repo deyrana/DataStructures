@@ -11,7 +11,7 @@ public class Graph {
 	// Array of linked list => Adjacency list
 	private LinkedList<Integer> adj[];
 
-	private Integer[][] adjMat;
+	private int[][] adjMat;
 
 	@SuppressWarnings("unchecked")
 	public Graph(int v) {
@@ -22,7 +22,7 @@ public class Graph {
 		for (int i = 0; i < v; ++i)
 			adj[i] = new LinkedList<Integer>();
 
-		adjMat = new Integer[v][v];
+		adjMat = new int[v][v];
 	}
 
 	public int getV() {
@@ -41,11 +41,11 @@ public class Graph {
 		this.adj = adj;
 	}
 
-	public Integer[][] getAdjMat() {
+	public int[][] getAdjMat() {
 		return adjMat;
 	}
 
-	public void setAdjMat(Integer[][] adjMat) {
+	public void setAdjMat(int[][] adjMat) {
 		this.adjMat = adjMat;
 	}
 
@@ -53,6 +53,20 @@ public class Graph {
 	public void addEdge(int v, int w) {
 		adj[v].add(w);
 		adjMat[v][w] = 1;
+	}
+	
+	public void addEdge(int v, int w, int wt) {
+		adj[v].add(w);
+		adjMat[v][w] = wt;
+	}
+	
+	public void printAdjMat() {
+		for (int i = 0; i < this.V; i++) {
+			for (int j = 0; j < this.V; j++) {
+				System.out.print(this.adjMat[i][j] + " ");
+			}
+			System.out.println();
+		}
 	}
 
 	@Override

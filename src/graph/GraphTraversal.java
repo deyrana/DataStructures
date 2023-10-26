@@ -90,7 +90,7 @@ public class GraphTraversal {
 	
 	private static void BFSmat(Graph g, int startNode) {
 		int V = g.getV();
-		Integer[][] adjMat = g.getAdjMat();
+		int[][] adjMat = g.getAdjMat();
 		Vector<Integer> visited = new Vector<>(V);
 		
 		Queue<Integer> q = new LinkedList<>();
@@ -103,7 +103,7 @@ public class GraphTraversal {
 			
 			for (int i = 0; i < V; i++) {
 				Integer n = adjMat[vert][i];
-				if (n != null && !visited.contains(i)) {
+				if (n != 0 && !visited.contains(i)) {
 					visited.add(i);
 					q.add(i);
 				}
