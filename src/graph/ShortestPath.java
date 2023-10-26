@@ -42,18 +42,77 @@ public class ShortestPath {
 		g.addEdge(4, 5, 10);
 		g.addEdge(5, 4, 10);
 
-		int[] dist = dijkstra(g, 0);
-		System.out.println("dijkstra - ");
-//		for (int i = 0; i < 9; i++) {
-//			System.out.print(dist[i] + " ");
-//		}
+//		int[] dist = dijkstra(g, 0);
+//		System.out.println("dijkstra - ");
+//		
+//		printArr(dist, g.getV());
+//		System.out.println();
+//		System.out.println("bellmanFord - ");
+//		dist = bellmanFord(g, 0);
+//		printArr(dist, g.getV());
 		
-		printArr(dist, g.getV());
-		System.out.println();
-		System.out.println("bellmanFord - ");
-		dist = bellmanFord(g, 0);
-		printArr(dist, g.getV());
+//		Graph g = new Graph(4);
+//		
+//		g.addEdge(0, 1, 5);
+//		g.addEdge(0, 3, 10);
+//		g.addEdge(1, 2, 3);
+//		g.addEdge(2, 3, 1);
+		
+		int distPair[][] = floydWarshall(g);
+		
+		for (int u = 0; u < g.getV(); u++) {
+			for (int v = 0; v < g.getV(); v++) {
+				if(distPair[u][v] == Integer.MAX_VALUE) {
+					System.out.print("I   ");
+				} else {
+					System.out.print(distPair[u][v]+"   ");
+				}
+			}
+			System.out.println();
+		}
 
+	}
+
+	
+	/* ALGORITHM
+	 * 
+	 * 1. Create a distPair 2d array representing shortest distance between 2 vertices u and v
+	 * 2. Initialize distPair with 0 for u==v, INFINITE for no edges and weight for edges where edge is present
+	 * 3. Now select an intermediate node k by looping over all vertices
+	 * 4. Now pick all pair of vertices (u,v) in 2d array
+	 * 5. update distance between u and v if distance of u,v is more than dist(u,k) + dist(k,u)
+	 * 6. Return distPair 2d array
+	 * 
+	 * */
+	public static int[][] floydWarshall(Graph g) {
+
+		int V = g.getV();
+		int[][] adjMat = g.getAdjMat();
+		int distPair[][] = new int[V][V];
+
+		// Initialize 2d array
+		for (int u = 0; u < V; u++) {
+			for (int v = 0; v < V; v++) {
+				if (u == v)
+					distPair[u][v] = 0;
+				else if (adjMat[u][v] == 0)
+					distPair[u][v] = Integer.MAX_VALUE;
+				else
+					distPair[u][v] = adjMat[u][v];
+			}
+		}
+
+		for (int k = 0; k < V; k++) {
+			for (int u = 0; u < V; u++) {
+				for (int v = 0; v < V; v++) {
+					if (distPair[u][k] != Integer.MAX_VALUE && distPair[k][v] != Integer.MAX_VALUE) {
+						distPair[u][v] = Integer.min(distPair[u][v], distPair[u][k] + distPair[k][v]);
+					}
+				}
+			}
+		}
+
+		return distPair;
 	}
 
 	/* ALGORITHM
