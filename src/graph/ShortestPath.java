@@ -1,50 +1,62 @@
 package graph;
 
+import java.util.Arrays;
+
 public class ShortestPath {
 
 	public static void main(String[] args) {
 
-		Graph g = new Graph(9);
-
-		g.addEdge(0, 1, 4);
-		g.addEdge(1, 0, 4);
-		g.addEdge(0, 7, 8);
-		g.addEdge(7, 0, 8);
-
-		g.addEdge(1, 7, 11);
-		g.addEdge(7, 1, 11);
-		g.addEdge(1, 2, 8);
-		g.addEdge(2, 1, 8);
-
-		g.addEdge(7, 6, 1);
-		g.addEdge(6, 7, 1);
-		g.addEdge(7, 8, 7);
-		g.addEdge(8, 7, 7);
-
-		g.addEdge(2, 8, 2);
-		g.addEdge(8, 2, 2);
-		g.addEdge(2, 3, 7);
-		g.addEdge(3, 2, 7);
-		g.addEdge(2, 5, 4);
-		g.addEdge(5, 2, 4);
-
-		g.addEdge(8, 6, 6);
-		g.addEdge(6, 8, 6);
-
-		g.addEdge(6, 5, 2);
-		g.addEdge(5, 6, 2);
-
-		g.addEdge(3, 5, 14);
-		g.addEdge(5, 3, 14);
-		g.addEdge(3, 4, 9);
-		g.addEdge(4, 3, 9);
-
-		g.addEdge(4, 5, 10);
-		g.addEdge(5, 4, 10);
-
-//		int[] dist = dijkstra(g, 0);
-//		System.out.println("dijkstra - ");
+//		Graph g = new Graph(9);
+//
+//		g.addEdge(0, 1, 4);
+//		g.addEdge(1, 0, 4);
+//		g.addEdge(0, 7, 8);
+//		g.addEdge(7, 0, 8);
+//
+//		g.addEdge(1, 7, 11);
+//		g.addEdge(7, 1, 11);
+//		g.addEdge(1, 2, 8);
+//		g.addEdge(2, 1, 8);
+//
+//		g.addEdge(7, 6, 1);
+//		g.addEdge(6, 7, 1);
+//		g.addEdge(7, 8, 7);
+//		g.addEdge(8, 7, 7);
+//
+//		g.addEdge(2, 8, 2);
+//		g.addEdge(8, 2, 2);
+//		g.addEdge(2, 3, 7);
+//		g.addEdge(3, 2, 7);
+//		g.addEdge(2, 5, 4);
+//		g.addEdge(5, 2, 4);
+//
+//		g.addEdge(8, 6, 6);
+//		g.addEdge(6, 8, 6);
+//
+//		g.addEdge(6, 5, 2);
+//		g.addEdge(5, 6, 2);
+//
+//		g.addEdge(3, 5, 14);
+//		g.addEdge(5, 3, 14);
+//		g.addEdge(3, 4, 9);
+//		g.addEdge(4, 3, 9);
+//
+//		g.addEdge(4, 5, 10);
+//		g.addEdge(5, 4, 10);
+//
+		
+		
+//		Graph g = new Graph(4);
+//		g.addEdge(0, 1, 0);
+//		g.addEdge(0, 2, 3);
+//		g.addEdge(0, 3, 3);
+//		g.addEdge(1, 2, 0);
+//		g.addEdge(2, 3, 0);
 //		
+//		g.printAdjMat();
+//		
+//		int[] dist = dijkstra(g, 1);
+//		System.out.println("dijkstra - ");
 //		printArr(dist, g.getV());
 //		System.out.println();
 //		System.out.println("bellmanFord - ");
@@ -58,22 +70,82 @@ public class ShortestPath {
 //		g.addEdge(1, 2, 3);
 //		g.addEdge(2, 3, 1);
 		
-		int distPair[][] = floydWarshall(g);
+		Graph g = new Graph(4);
 		
-		for (int u = 0; u < g.getV(); u++) {
-			for (int v = 0; v < g.getV(); v++) {
-				if(distPair[u][v] == Integer.MAX_VALUE) {
-					System.out.print("I   ");
-				} else {
-					System.out.print(distPair[u][v]+"   ");
-				}
-			}
-			System.out.println();
-		}
+		g.addEdge(0, 1, -5);
+		g.addEdge(0, 2, 2);
+		g.addEdge(0, 3, 3);
+		g.addEdge(1, 2, 4);
+		g.addEdge(2, 3, 1);
+		
+		
+//		int distPair[][] = floydWarshall(g);
+		
+		int distPair[][] = johnson(g);
+		printArr2D(distPair, g.getV());
 
 	}
 
-	
+	/* ALGORITHM
+	 * 
+	 * 1. Create a new graph by adding a new vertex and assigning weights from new vertex to every other vertex as zero.
+	 * 2. Using BellmanFord calculate shortest distance of each node from new vertex.
+	 * 3. re-weight the edges of old graph using distance from BellmanFord 
+	 * 4. Now calculate shortest path for all vertices using Dijkstra.
+	 * 5. Now revert the weights of the graph edges as done earlier
+	 * 
+	 * */
+	public static int[][] johnson(Graph g) {
+		int V = g.getV();
+		int[][] adjMat = g.getAdjMat();
+		int[][] result = new int[V][V];
+
+		int[][] newAdjMat = addNewVertex(adjMat, V);
+		Graph newGraph = new Graph(V + 1);
+		newGraph.setAdjMat(newAdjMat);
+
+		int[] distBellman = bellmanFord(newGraph, V);
+
+		// re-weight edges
+		for (int u = 0; u < V; u++) {
+			for (int v = 0; v < V; v++) {
+				if (adjMat[u][v] != Integer.MAX_VALUE)
+					adjMat[u][v] += distBellman[u] - distBellman[v];
+			}
+		}
+
+		g.setAdjMat(adjMat);
+
+		for (int u = 0; u < V; u++) {
+			int[] distDijk = dijkstra(g, u);
+
+			for (int v = 0; v < V; v++) {
+				if (distDijk[v] != Integer.MAX_VALUE)
+					distDijk[v] += distBellman[v] - distBellman[u];
+			}
+
+			result[u] = distDijk;
+		}
+
+		return result;
+	}
+
+
+	private static int[][] addNewVertex(int[][] adjMat, int V) {
+
+		int[][] newAdjMat = new int[V + 1][V + 1];
+
+		for (int i = 0; i < V; i++) {
+			for (int j = 0; j < V; j++) {
+				newAdjMat[i][j] = adjMat[i][j];
+				newAdjMat[i][V] = Integer.MAX_VALUE;
+			}
+		}
+
+		return newAdjMat;
+	}
+
+
 	/* ALGORITHM
 	 * 
 	 * 1. Create a distPair 2d array representing shortest distance between 2 vertices u and v
@@ -95,8 +167,6 @@ public class ShortestPath {
 			for (int v = 0; v < V; v++) {
 				if (u == v)
 					distPair[u][v] = 0;
-				else if (adjMat[u][v] == 0)
-					distPair[u][v] = Integer.MAX_VALUE;
 				else
 					distPair[u][v] = adjMat[u][v];
 			}
@@ -132,9 +202,7 @@ public class ShortestPath {
 		int[] dist = new int[V];
 
 		// initialize
-		for (int i = 0; i < V; i++) {
-			dist[i] = Integer.MAX_VALUE;
-		}
+		Arrays.fill(dist, Integer.MAX_VALUE);
 
 		dist[src] = 0;
 
@@ -142,17 +210,17 @@ public class ShortestPath {
 			boolean flag = false;
 			for (int u = 0; u < V; u++) {
 				for (int v = 0; v < V; v++) {
-					if (adjMat[u][v] != 0 && dist[u] != Integer.MAX_VALUE) {
+					if (adjMat[u][v] != Integer.MAX_VALUE && dist[u] != Integer.MAX_VALUE) {
 						dist[v] = Integer.min(dist[v], dist[u] + adjMat[u][v]);
 						flag = true;
 					}
 				}
 			}
-			
-			if(!flag) {
+
+			if (!flag) {
 				return dist;
 			}
-			
+
 		}
 
 		return dist;
@@ -183,21 +251,21 @@ public class ShortestPath {
 		boolean[] sptSet = new boolean[V];
 
 		// initialize
-		for (int i = 0; i < V; i++) {
-			dist[i] = Integer.MAX_VALUE;
-			sptSet[i] = false;
-		}
+		Arrays.fill(dist, Integer.MAX_VALUE);
+		Arrays.fill(sptSet, false);
 
 		dist[src] = 0;
 
 		for (int vert = 0; vert < V; vert++) {
 			int u = minDist(dist, sptSet, V);
 
-			sptSet[u] = true;
+			if (u != -1) {
+				sptSet[u] = true;
 
-			for (int v = 0; v < V; v++) {
-				if (!sptSet[v] && adjMat[u][v] != 0 && dist[u] != Integer.MAX_VALUE) {
-					dist[v] = Integer.min(dist[u] + adjMat[u][v], dist[v]);
+				for (int v = 0; v < V; v++) {
+					if (!sptSet[v] && adjMat[u][v] != Integer.MAX_VALUE && dist[u] != Integer.MAX_VALUE) {
+						dist[v] = Integer.min(dist[u] + adjMat[u][v], dist[v]);
+					}
 				}
 			}
 
@@ -218,11 +286,48 @@ public class ShortestPath {
 		return minInd;
 	}
 	
-	public static void printArr(int dist[], int V)
-    {
-        System.out.println("Vertex Distance from Source");
-        for (int i = 0; i < V; ++i)
-            System.out.println(i + "\t\t" + dist[i]);
-    }
+	public static void printArr(int dist[], int V) {
+		System.out.println("Vertex Distance from Source");
+		for (int i = 0; i < V; ++i)
+			System.out.println(i + "\t\t" + dist[i]);
+	}
+
+	public static void printArr2D(int dist[][], int V) {
+		System.out.println("Vertex\t\tDistance from Source");
+		for (int i = 0; i < V; ++i) {
+			System.out.print(i + "\t\t");
+			for (int j = 0; j < V; j++) {
+				if (dist[i][j] == Integer.MAX_VALUE) {
+					System.out.print("I\t\t");
+				} else
+					System.out.print(dist[i][j] + "\t\t");
+			}
+			System.out.println();
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -28,7 +28,7 @@ public class GraphPractice {
 		g.addEdge(4, 3);
 
 		int level = findLevel(g, 3, 4);
-		System.out.println("level=> "+level);
+		System.out.println("level=> " + level);
 
 	}
 

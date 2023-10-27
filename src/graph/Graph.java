@@ -23,6 +23,15 @@ public class Graph {
 			adj[i] = new LinkedList<Integer>();
 
 		adjMat = new int[v][v];
+		
+		for (int i = 0; i < v; i++) {
+			for (int j = 0; j < v; j++) {
+				if(i==j)
+					adjMat[i][j] = 0;
+				else
+					adjMat[i][j] = Integer.MAX_VALUE;
+			}
+		}
 	}
 
 	public int getV() {
@@ -63,7 +72,10 @@ public class Graph {
 	public void printAdjMat() {
 		for (int i = 0; i < this.V; i++) {
 			for (int j = 0; j < this.V; j++) {
-				System.out.print(this.adjMat[i][j] + " ");
+				if (this.adjMat[i][j] == Integer.MAX_VALUE)
+					System.out.print("I\t");
+				else
+					System.out.print(this.adjMat[i][j] + "\t");
 			}
 			System.out.println();
 		}
