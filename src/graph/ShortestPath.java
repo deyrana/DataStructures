@@ -90,7 +90,7 @@ public class ShortestPath {
 	 * 
 	 * 1. Create a new graph by adding a new vertex and assigning weights from new vertex to every other vertex as zero.
 	 * 2. Using BellmanFord calculate shortest distance of each node from new vertex.
-	 * 3. re-weight the edges of old graph using distance from BellmanFord 
+	 * 3. re-weight the edges of old graph using distance from BellmanFord -> This converts the negative edges to positive
 	 * 4. Now calculate shortest path for all vertices using Dijkstra.
 	 * 5. Now revert the weights of the graph edges as done earlier
 	 * 

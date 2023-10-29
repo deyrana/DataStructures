@@ -1,6 +1,8 @@
 package graph;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class MinimumSpanningTree {
 
@@ -47,15 +49,21 @@ public class MinimumSpanningTree {
 		
 		int [] parent = primMST(g);
 		printMST(g, parent);
+
 		
 	}
 
 	public static void printMST(Graph g, int[] parent) {
 		int V = g.getV();
 		int[][] graph = g.getAdjMat();
+		int cost = 0;
 		System.out.println("Edge \tWeight");
-        for (int i = 1; i < V; i++)
+        for (int i = 1; i < V; i++) {
             System.out.println(parent[i] + " - " + i + "\t"+ graph[i][parent[i]]);
+            cost+=graph[i][parent[i]];
+        }
+        System.out.println("Cost of MST - "+cost);
+        
 		
 	}
 
@@ -111,5 +119,6 @@ public class MinimumSpanningTree {
 		}
 		return minIndex;
 	}
+
 
 }

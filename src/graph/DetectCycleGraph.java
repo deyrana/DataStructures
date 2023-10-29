@@ -11,10 +11,13 @@ public class DetectCycleGraph {
 		g.addEdge(0, 1);
 		g.addEdge(1, 2);
 		g.addEdge(2, 3);
-		g.addEdge(3, 0);
+		g.addEdge(2, 0);
 
 		Boolean isCycle = detectCycle(g);
 		System.out.println("isCycle - " + isCycle);
+		
+		Boolean isCycleMat = detectCycleMatrix(g);
+		System.out.println("isCycleMat - " + isCycleMat);
 
 	}
 
@@ -27,7 +30,7 @@ public class DetectCycleGraph {
 	 * 5. else return false - no cycle present
 	 * 
 	 * */
-	private static Boolean detectCycle(Graph g) {
+	public static Boolean detectCycle(Graph g) {
 
 		int V = g.getV();
 		LinkedList<Integer>[] adj = g.getAdj();
@@ -52,7 +55,7 @@ public class DetectCycleGraph {
 	 * 6. Else while returning from function remove the node from path array and return false
 	 * 
 	 * */
-	private static Boolean detectCycleUtil(LinkedList<Integer>[] adj, Integer node, int V, ArrayList<Integer> visited,
+	public static Boolean detectCycleUtil(LinkedList<Integer>[] adj, Integer node, int V, ArrayList<Integer> visited,
 			ArrayList<Integer> path) {
 
 		visited.add(node);
@@ -70,5 +73,43 @@ public class DetectCycleGraph {
 
 		return Boolean.FALSE;
 	}
+	
+	
+	public static Boolean detectCycleMatrix(Graph g) {
+
+		int V = g.getV();
+		int[][] adjMat = g.getAdjMat();
+
+		boolean[] visited = new boolean[V], path = new boolean[V];
+
+		for (int i = 0; i < V; i++) {
+			if (!visited[i] && detectCycleUtil(adjMat, i, V, visited, path)) {
+				return Boolean.TRUE;
+			}
+		}
+
+		return Boolean.FALSE;
+	}
+
+	public static boolean detectCycleUtil(int[][] adjMat, int node, int V, boolean[] visited, boolean[] path) {
+		visited[node] = true;
+		path[node] = true;
+
+		for (int v = 0; v < V; v++) {
+			if (adjMat[node][v] != Integer.MAX_VALUE && v != node) {
+				if (!visited[v]) {
+					if (detectCycleUtil(adjMat, v, V, visited, path)) {
+						return Boolean.TRUE;
+					}
+				} else if (path[v]) {
+					return Boolean.TRUE;
+				}
+			}
+		}
+		path[node] = false;
+		return Boolean.FALSE;
+	}
+	
+	
 
 }
