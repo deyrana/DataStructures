@@ -1,5 +1,6 @@
 package binaryTree;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -89,7 +90,7 @@ public class BinaryTreePractice {
 		return false;
 	}
 
-	private static int findSizeBT(BinaryTree root) {
+	public static int findSizeBT(BinaryTree root) {
 		
 		if(root==null)
 			return 0;
@@ -97,30 +98,134 @@ public class BinaryTreePractice {
 		return 1 + findSizeBT(root.left) + findSizeBT(root.right);
 	}
 
-	private static Boolean checkCompleteBT(BinaryTree root, int h, int level) {
-		// Leaf nodes
-		if (level == h) {
-			if (root.left == null && root.right == null) {
-				return true;
+//	public static Boolean checkCompleteBT(BinaryTree root, int h, int level) {
+//		// Leaf nodes
+//		if (level == h) {
+//			if (root.left == null && root.right == null) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		}
+//		// Internal nodes
+//		else {
+//			if (root.left != null && root.right != null && checkCompleteBT(root.left, h, level + 1)
+//					&& checkCompleteBT(root.right, h, level + 1)) {
+//				return true;
+//			} else if (root.left != null && root.right == null && checkCompleteBT(root.left, h, level + 1)) {
+//				return true;
+//			} else if (root.left == null && root.right == null ) {
+//				return true;
+//			}
+//			else {
+//				return false;
+//			}
+//		}
+//	}
+	
+	public static boolean checkCompleteBT(BinaryTree root) {
+
+		if (root == null)
+			return true;
+
+		Queue<BinaryTree> queue = new LinkedList<>();
+		ArrayList<Integer> ar = new ArrayList<Integer>();
+		queue.add(root);
+		ar.add(root.key);
+		
+		
+
+		while (!queue.isEmpty()) {
+			BinaryTree node = queue.poll();
+
+			if (node.left != null) {
+				ar.add(node.left.key);
+				queue.add(node.left);
 			} else {
-				return false;
+				ar.add(Integer.MIN_VALUE);
+			}
+			if (node.right != null) {
+				ar.add(node.right.key);
+				queue.add(node.right);
+			} else {
+				ar.add(Integer.MIN_VALUE);
 			}
 		}
-		// Internal nodes
-		else {
-			if (root.left != null && root.right != null && checkCompleteBT(root.left, h, level + 1)
-					&& checkCompleteBT(root.right, h, level + 1)) {
-				return true;
-			} else if (root.left != null && root.right == null && checkCompleteBT(root.left, h, level + 1)) {
-				return true;
-			} else if (root.left == null && root.right == null ) {
-				return true;
-			}
-			else {
+		
+		while(!ar.isEmpty()) {
+			Integer i = ar.remove(0);
+			if(i == Integer.MIN_VALUE && !ar.isEmpty() && ar.get(0) != Integer.MIN_VALUE)
 				return false;
-			}
 		}
+
+		return true;
 	}
+	
+	public static boolean checkCompleteBTRecur(BinaryTree root, int i, int totalNodes) {
+		if(root == null)
+			return true;
+		
+		if(i >= totalNodes)
+			return false;
+		return checkCompleteBTRecur(root.left, 2*i+1, totalNodes) && checkCompleteBTRecur(root.right, 2*i+2, totalNodes);
+		
+	}
+	
+	public static int countTotalNodes(BinaryTree root) {
+		if(root == null) {
+			return 0;
+		}
+		
+		return 1 + countTotalNodes(root.left) + countTotalNodes(root.right);
+	}
+	
+//	public static boolean checkCompleteBT(BinaryTree root, int h) {
+//
+//		if (root == null)
+//			return true;
+//
+//		int level = 0;
+//		Queue<BinaryTree> queue = new LinkedList<>();
+//		queue.add(root);
+//		queue.add(null);
+//		boolean flag = false;
+//
+//		while (!queue.isEmpty()) {
+//			BinaryTree node = queue.poll();
+//
+//			if (node == null) {
+//				flag = false;
+//				++level;
+//			}
+//
+//			if (node != null) {
+//				if (node.left != null) {
+//					if (flag) {
+//						return false;
+//					}
+//					queue.add(node.left);
+//				} else {
+//					if (level + 1 < h)
+//						return false;
+//					flag = true;
+//				}
+//				if (node.right != null) {
+//					if (flag) {
+//						return false;
+//					}
+//					queue.add(node.right);
+//				} else {
+//					if (level + 1 < h)
+//						return false;
+//					flag = true;
+//				}
+//			} else if (!queue.isEmpty()) {
+//				queue.add(null);
+//			}
+//		}
+//
+//		return true;
+//	}
 
 	private static Boolean chechPerfectBT(BinaryTree root, int h, int level) {
 

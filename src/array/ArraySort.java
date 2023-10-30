@@ -1,6 +1,6 @@
 package array;
 
-import java.util.Random;
+import heap.HeapOperations;
 
 public class ArraySort {
 
@@ -9,45 +9,67 @@ public class ArraySort {
 //		int arr[] = new int[] { 1, 6, 3, 8, 23, 78, 45, 17, 50, 13, 97, 146, 78, 99, 786, 138 };
 //		int arr[] = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
 		
-		int arr[] = new int[100000];
-		int cnt = 0;
-		Random rand = new Random();
-		for(int i = 100000; i>0; i--) {
-			arr[cnt++] = rand.nextInt(100000);
+		int[] arr = new int[100001];
+		for(int i=0; i<=100000 ; i++) {
+			arr[i] = 100000 -i;
 		}
 		
-		long before = System.currentTimeMillis();
-		
-		int bubbleSort[] = bubbleSort(arr, arr.length);
-		
-		long after = System.currentTimeMillis();
-		System.out.println(" bubbleSort Time elapsed - "+(after-before));
-		
-		before = System.currentTimeMillis();
-		int selectionSort[] = selectionSort(arr, arr.length);
-		after = System.currentTimeMillis();
-		System.out.println(" selectionSort Time elapsed - "+(after-before));
-		
-		before = System.currentTimeMillis();
-		int mergeSort[] = mergeSort(arr, 0, arr.length - 1);
-		after = System.currentTimeMillis();
-		System.out.println(" mergeSort Time elapsed - "+(after-before));
-		
-		
-		before = System.currentTimeMillis();
-		int insertionSort[] = insertionSort(arr, arr.length);
-		after = System.currentTimeMillis();
-		System.out.println(" insertionSort Time elapsed - "+(after-before));
-		
-		
-		before = System.currentTimeMillis();
-		int quickSort[] = quickSort(arr, 0, arr.length - 1);
-		after = System.currentTimeMillis();
-		System.out.println(" quickSort Time elapsed - "+(after-before));
 
-//		printArray(bubbleSort);
-//		printArray(quickSort);
 		
+//		int bubbleSort[] = bubbleSort(arr, arr.length);
+//
+//
+//		int selectionSort[] = selectionSort(arr, arr.length);
+//
+//		int mergeSort[] = mergeSort(arr, 0, arr.length - 1);
+//
+//		int insertionSort[] = insertionSort(arr, arr.length);
+//
+//		int quickSort[] = quickSort(arr, 0, arr.length - 1);
+		
+		long before = System.currentTimeMillis();
+//		int heapSort[] = heapSort(arr);
+		int heapSort[] = heapSort(arr);
+		long after = System.currentTimeMillis();
+
+
+		printArray(heapSort);
+		System.out.println(after-before);
+
+		
+
+	}
+	
+	public static int[] heapSort(int arr[]) {
+		int n = arr.length;
+
+		// Call heapify for all internal node since all leaf nodes are already heap
+		// in heap, internal(non-leaf) nodes range from index 0 to (n-1)/2
+		for (int i = (n - 1) / 2; i >= 0; i--) {
+			heapify(arr, i, n);
+		}
+
+		// Remove topmost greatest element and place it at the end of array and call heapify for the reduced array
+		for (int i = n - 1; i > 0; i--) {
+			arr = HeapOperations.swap(arr, 0, i);
+			heapify(arr, 0, i);
+		}
+
+		return arr;
+	}
+
+	public static void heapify(int[] arr, int i, int n) {
+
+		int l = 2 * i + 1, r = 2 * i + 2, largest = i;
+
+		if (l < n && arr[l] > arr[largest])
+			largest = l;
+		if (r < n && arr[r] > arr[largest])
+			largest = r;
+		if (largest != i) {
+			arr = HeapOperations.swap(arr, i, largest);
+			heapify(arr, largest, n);
+		}
 
 	}
 

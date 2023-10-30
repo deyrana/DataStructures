@@ -31,16 +31,21 @@ public class GraphPractice {
 //		int level = findLevel(g, 3, 4);
 //		System.out.println("level=> " + level);
 		
-		int[][] roads = new int[][]{
-			 {0, 1, 1, 100, 0, 0},
-	         {1, 0, 1, 0, 0, 0},
-	         {1, 1, 0, 0, 0, 0},
-	         {100, 0, 0, 0, 2, 2},
-	         {0, 0, 0, 2, 0, 2},
-	         {0, 0, 0, 2, 2, 0}};
-	         
-        int minCost = findMinCost(roads);
-        System.out.println("minCost - "+minCost);
+//		int[][] roads = new int[][]{
+//			 {0, 1, 1, 100, 0, 0},
+//	         {1, 0, 1, 0, 0, 0},
+//	         {1, 1, 0, 0, 0, 0},
+//	         {100, 0, 0, 0, 2, 2},
+//	         {0, 0, 0, 2, 0, 2},
+//	         {0, 0, 0, 2, 2, 0}};
+//	         
+//        int minCost = findMinCost(roads);
+//        System.out.println("minCost - "+minCost);
+		
+		int i = 3;
+		System.out.println((i-1)/2);
+		
+		
 
 	}
 
