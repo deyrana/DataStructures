@@ -2,11 +2,12 @@ package array;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class ArrayPractice {
 
 	public static void main(String[] args) {
-		int[] arr = new int[] { 90, 70, 20, 80, 50 };
+//		int[] arr = new int[] { 90, 70, 20, 80, 50 };
 //		int revArr[] = reverseArray(arr, arr.length);
 //		
 //		for (int i : revArr) {
@@ -14,9 +15,26 @@ public class ArrayPractice {
 //		}
 
 //		findAllPossibleArray(arr, arr.length);
-		printSubArrays(arr, 0, 0);
+//		printSubArrays(arr, 0, 0);
+		long[] arr = new long []{1,2,3};
+		System.out.println(minCost(arr, 3));
 
 	}
+	
+	static long minCost(long arr[], int n) 
+    {
+		PriorityQueue<Long> pq = new PriorityQueue<Long>();
+		for(int i = 0; i< n; i++) {
+			pq.add(arr[i]);
+		}
+		long cost = 0;
+		while(pq.size() > 1) {
+			long sum = pq.poll() + pq.poll();
+			cost += sum;
+			pq.add(sum);
+		}
+        return cost;
+    }
 
 	static void printSubArrays(int[] arr, int start, int end) {
 		// Stop if we have reached the end of the array

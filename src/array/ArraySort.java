@@ -7,13 +7,13 @@ public class ArraySort {
 	public static void main(String[] args) {
 		
 //		int arr[] = new int[] { 1, 6, 3, 8, 23, 78, 45, 17, 50, 13, 97, 146, 78, 99, 786, 138 };
-//		int arr[] = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+//		int arr[] = new int[] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
 		
-		int[] arr = new int[100001];
-		for(int i=0; i<=100000 ; i++) {
-			arr[i] = 100000 -i;
-		}
-		
+//		int[] arr = new int[100001];
+//		for(int i=0; i<=100000 ; i++) {
+//			arr[i] = 100000 -i;
+//		}
+		int arr[] = new int[] {1,2,3,4,5,6,7,8,9,10};
 
 		
 //		int bubbleSort[] = bubbleSort(arr, arr.length);
@@ -25,16 +25,16 @@ public class ArraySort {
 //
 //		int insertionSort[] = insertionSort(arr, arr.length);
 //
-//		int quickSort[] = quickSort(arr, 0, arr.length - 1);
+		int quickSort[] = quickSort(arr, 0, arr.length - 1);
 		
-		long before = System.currentTimeMillis();
+//		long before = System.currentTimeMillis();
+////		int heapSort[] = heapSort(arr);
 //		int heapSort[] = heapSort(arr);
-		int heapSort[] = heapSort(arr);
-		long after = System.currentTimeMillis();
+//		long after = System.currentTimeMillis();
 
 
-		printArray(heapSort);
-		System.out.println(after-before);
+		printArray(quickSort);
+//		System.out.println(after-before);
 
 		
 
@@ -44,7 +44,7 @@ public class ArraySort {
 		int n = arr.length;
 
 		// Call heapify for all internal node since all leaf nodes are already heap
-		// in heap, internal(non-leaf) nodes range from index 0 to (n-1)/2
+		// In heap, internal(non-leaf) nodes range from index 0 to (n-1)/2
 		for (int i = (n - 1) / 2; i >= 0; i--) {
 			heapify(arr, i, n);
 		}
@@ -80,7 +80,7 @@ public class ArraySort {
 			// pivot as small and vice versa
 			int j = partition(arr, l, h);
 
-			// Recursively use it for smaller partitions
+			// Recursively use it for smaller partitions left and right of pivot
 			arr = quickSort(arr, l, j - 1);
 			arr = quickSort(arr, j + 1, h);
 		}
@@ -105,9 +105,10 @@ public class ArraySort {
 		}
 
 		// finally place the pivot at right location - just to the right of all the
-		// smalller elements
+		// smaller elements
 		arr = swap(arr, i + 1, h);
 
+		// Return the index of the pivot
 		return i + 1;
 	}
 
@@ -118,7 +119,15 @@ public class ArraySort {
 		return arr;
 	}
 
-	private static int[] insertionSort(int[] arr, int n) {
+	/* ALGORITHM
+	 * 
+	 * 1. Loop over the entire array from 2nd to last element
+	 * 2. For every element, compare it with all previous elements in the array up until index 0.
+	 * 3. If previous elements in array are bigger than the current element, then right shift the element in the array 
+	 * 4. In the end, insert the current element at correct position where all elements to the right are bigger than it.
+	 * 
+	 * */
+	public static int[] insertionSort(int[] arr, int n) {
 
 		for (int i = 1; i < n; i++) {
 			int key = arr[i];
@@ -134,7 +143,7 @@ public class ArraySort {
 		return arr;
 	}
 
-	private static int[] mergeSort(int[] arr, int l, int r) {
+	public static int[] mergeSort(int[] arr, int l, int r) {
 
 		if (l < r) {
 			int m = l + (r - l) / 2;
